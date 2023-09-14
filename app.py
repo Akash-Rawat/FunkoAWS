@@ -4,11 +4,6 @@ from PIL import Image
 import numpy as np
 from io import BytesIO
 import base64
-from io import BytesIO
-import base64
-
-
-
 import torch.nn as nn
 import torch.optim as optim
 from torchvision import transforms, models
