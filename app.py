@@ -149,7 +149,7 @@ def process_image_menHair(background_image, x, y, placeholder_image_path, x_coor
     placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
 
 # Function to generate Funko figurines
-def generate_funko_figurines(input_image, background_image_paths):
+def generate_funko_figurines(input_image):
     # Detect and classify beard style
     beard_classifier = BeardClassifier('Data/FunkoSavedModels/FunkoResnet18BeardStyle.pt', ['Bandholz', 'CleanShave', 'FullGoatee', 'Moustache', 'RapIndustryStandards', 'ShortBeard'])
     predicted_style_label = beard_classifier.classify_beard(input_image)
@@ -242,7 +242,7 @@ background_images = [gr.inputs.Image(type="pil", label="Background Image " + str
 # Create Gradio interface
 gr.Interface(
     fn=generate_funko_figurines,
-    inputs=[input_image] + background_images,
+    inputs=input_image,
     outputs=[gr.outputs.Image(type="numpy", label="Generated Image " + str(i + 1)) for i in range(3)],
     title="Funko Figurine Generator",
     description="Generate personalized Funko figurines with different styles and backgrounds.",
