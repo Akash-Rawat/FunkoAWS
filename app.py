@@ -24,11 +24,11 @@ class BeardClassifier:
         self.model.fc = torch.nn.Linear(num_ftrs, len(class_names))
         self.load_model(model_path)
         self.model.eval()
-        self.data_transforms = torch.nn.Sequential(
-            torch.nn.Resize((224, 224)),
-            torch.nn.ToTensor(),
-            torch.nn.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        )
+        self.data_transforms = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
         self.class_names = class_names
 
     def preprocess_image(self, image):
@@ -57,11 +57,11 @@ class BeardColorClassifier:
         self.model.fc = torch.nn.Linear(num_ftrs, len(class_names))
         self.load_model(model_path)
         self.model.eval()
-        self.data_transforms = torch.nn.Sequential(
-            torch.nn.Resize((224, 224)),
-            torch.nn.ToTensor(),
-            torch.nn.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        )
+        self.data_transforms = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
         self.class_names = class_names
 
     def preprocess_image(self, image):
@@ -114,11 +114,11 @@ class HairStyleClassifier:
         self.model.fc = torch.nn.Linear(num_ftrs, len(class_names))
         self.load_model(model_path)
         self.model.eval()
-        self.data_transforms = torch.nn.Sequential(
-            torch.nn.Resize((224, 224)),
-            torch.nn.ToTensor(),
-            torch.nn.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        )
+        self.data_transforms = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
         self.class_names = class_names
 
     def preprocess_image(self, image):
@@ -236,7 +236,7 @@ def generate_funko_figurines(input_image):
         final_images.append(base64_image)
 
     return final_images
-
+imageComponent = gr.Image(type="filepath")
 
 # Define Gradio input components
 input_image = gr.inputs.Image(type="pil", label="Upload your image")
@@ -245,8 +245,8 @@ background_images = [gr.inputs.Image(type="pil", label="Background Image " + str
 # Create Gradio interface
 gr.Interface(
     fn=generate_funko_figurines,
-    inputs=input_image,
-    outputs=[gr.outputs.Image(type="numpy", label="Generated Image " + str(i + 1)) for i in range(3)],
+    inputs=imageComponent,
+    outputs=[gr.outputs.Image(type="pil", label="Generated Image " + str(i + 1)) for i in range(3)],
     title="Funko Figurine Generator",
     description="Generate personalized Funko figurines with different styles and backgrounds.",
 ).launch()
