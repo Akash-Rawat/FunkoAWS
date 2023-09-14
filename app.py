@@ -238,7 +238,7 @@ background_images = [gr.inputs.Image(type="pil", label="Background Image " + str
 gr.Interface(
     fn=generate_funko_figurines,
     inputs=[input_image] + background_images,
-    outputs=gr.outputs.Image(type="base64", label="Generated Image"),
+    outputs=gr.outputs.Image(type="numpy", label="Generated Image"),
     title="Funko Figurine Generator",
     description="Generate personalized Funko figurines with different styles and backgrounds.",
 ).launch()
