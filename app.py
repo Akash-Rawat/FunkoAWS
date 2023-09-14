@@ -146,15 +146,15 @@ def process_image_menHair(background_image, x, y, placeholder_image_path, x_coor
 # Function to generate Funko figurines
 def generate_funko_figurines(input_image, background_image_paths):
     # Detect and classify beard style
-    beard_classifier = BeardClassifier('path_to_beard_style_model', ['Bandholz', 'CleanShave', 'FullGoatee', 'Moustache', 'RapIndustryStandards', 'ShortBeard'])
+    beard_classifier = BeardClassifier('Data/FunkoSavedModels/FunkoResnet18BeardStyle.pt', ['Bandholz', 'CleanShave', 'FullGoatee', 'Moustache', 'RapIndustryStandards', 'ShortBeard'])
     predicted_style_label = beard_classifier.classify_beard(input_image)
 
     # Detect and classify beard color
-    beard_color_classifier = BeardColorClassifier('path_to_beard_color_model', ['Black', 'DarkBrown', 'Ginger', 'LightBrown', 'SaltAndPepper', 'White'])
+    beard_color_classifier = BeardColorClassifier('Data/FunkoSavedModels/FunkoResnet18Color.pt', ['Black', 'DarkBrown', 'Ginger', 'LightBrown', 'SaltAndPepper', 'White'])
     predicted_color_label = beard_color_classifier.classify_beard_color(input_image)
 
     # Classify hairstyle
-    hair_style_classifier = HairStyleClassifier('path_to_hairstyle_model', ['Afro', 'Bald', 'Puff', 'Spike'])
+    hair_style_classifier = HairStyleClassifier('Data/FunkoSavedModels/FunkoResnet18HairStyle.pt', ['Afro', 'Bald', 'Puff', 'Spike'])
     predicted_hairStyle_label = hair_style_classifier.classify_hair(input_image)
 
     # Process background images and apply beard style and color along with hair style and color
@@ -164,18 +164,63 @@ def generate_funko_figurines(input_image, background_image_paths):
         background_image = Image.open(background_image_path)
         x_coordinate = 90
         y_coordinate = 50
-        dummy_eye(background_image, 245, 345, 'path_to_eye_image', x_coordinate, y_coordinate)
+        dummy_eye(background_image, 245, 345, 'Data/AdobeColorFunko/EyezBrowz/MaleEye.png', x_coordinate, y_coordinate)
 
         if predicted_style_label == 'Bandholz':
-            process_image_Beard(background_image, 320, 'path_to_beard_image', 50, 142)
+            process_image_Beard(background_image, 320,
+                                 "Data/AdobeColorFunko/Beard/Bandholz/{predicted_color_label}.png",
+                                 50, 142)
+
+        if predicted_style_label == 'ShortBeard':
+            process_image_Beard(background_image, 300,
+                                 "Data/AdobeColorFunko/Beard/ShortBeard/{predicted_color_label}.png",
+                                 62, 118)
+
+        if predicted_style_label == 'FullGoatee':
+            process_image_Beard(background_image, 230,
+                                 "Data/AdobeColorFunko/Beard/Goatee/{predicted_color_label}.png",
+                                 96, 168)
+
+        if predicted_style_label == 'RapIndustryStandards':
+            process_image_Beard(background_image, 290,
+                                 "Data/AdobeColorFunko/Beard/RapIndustry/{predicted_color_label}.png",
+                                 67, 120)
+
+        if predicted_style_label == 'Moustache':
+            process_image_Beard(background_image, 220,
+                                 "Data/AdobeColorFunko/Beard/Moustache/{predicted_color_label}.png",
+                                 100, 160)
+
+        if predicted_style_label == 'CleanShave':
+            process_image_Beard(background_image, 220,
+                                 "Data/AdobeColorFunko/Beard/CleanShave/{predicted_color_label}.png",
+                                 100, 160)
 
         # Add other conditions for different beard styles
 
         # Overlay hairstyle
         if predicted_hairStyle_label == 'Afro':
             process_image_menHair(background_image, 336, 420, 'path_to_hairstyle_image', 41, 76)
+        if predicted_hairStyle_label == 'Afro':
+            process_image_menHair(background_image, 336, 420,
+                                   "Data/AdobeColorFunko/MenHairstyle/Afro/{predicted_color_label}.png",
+                                   41, 76)
 
-        # Add other conditions for different hairstyles
+        if predicted_hairStyle_label == 'Puff':
+            process_image_menHair(background_image, 320, 420,
+                                   "Data/AdobeColorFunko/MenHairstyle/Puff/{predicted_color_label}.png",
+                                   50, 68)
+
+        if predicted_hairStyle_label == 'Spike':
+            process_image_menHair(background_image, 310, 420,
+                                   "Data/AdobeColorFunko/MenHairstyle/Spike/{predicted_color_label}.png",
+                                   50, 70)
+
+        if predicted_hairStyle_label == 'Bald':
+            process_image_menHair(background_image, 310, 420,
+                                   "Data/AdobeColorFunko/MenHairstyle/Bald/{predicted_color_label}.png",
+                                   67, 120)
+
 
         # Convert the resulting image to base64
         buffered = BytesIO()
