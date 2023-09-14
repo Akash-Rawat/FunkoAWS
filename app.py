@@ -12,7 +12,7 @@ import base64
 import torch.nn as nn
 import torch.optim as optim
 from torchvision import transforms, models
-r
+
 # Combined Code for Beard and Hairstyle Detection and Styling
 
 background_image_paths = [
