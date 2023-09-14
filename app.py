@@ -92,6 +92,7 @@ def dummy_eye(background_image, x, y, placeholder_image_path, x_coordinate, y_co
     placeholder_mask = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
     background_image.paste(placeholder_image, region_box, mask=placeholder_mask)
     background_array = np.array(background_image)
+    return background_image
 
 # Function to overlay a beard on a background image
 def process_image_Beard(background_image, x, placeholder_image_path, x_coordinate, y_coordinate):
@@ -105,6 +106,7 @@ def process_image_Beard(background_image, x, placeholder_image_path, x_coordinat
     background_image.paste(placeholder_image, region_box, mask=placeholder_mask)
     background_array = np.array(background_image)
     placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
+    return background_array
 
 # Function to classify hairstyle
 class HairStyleClassifier:
@@ -151,6 +153,7 @@ def process_image_menHair(background_image, x, y, placeholder_image_path, x_coor
     background_image.paste(placeholder_image, region_box, mask=placeholder_mask)
     background_array = np.array(background_image)
     placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
+    return background_image
 
 # Function to generate Funko figurines
 def generate_funko_figurines(input_image):
