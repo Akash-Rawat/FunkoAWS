@@ -38,12 +38,7 @@ class BeardClassifier:
         return image
 
     def load_model(self, model_path):
-        if torch.cuda.is_available():
-            # Load model on CUDA if available
-            self.model.load_state_dict(torch.load(model_path))
-        else:
-            # Load model on CPU
-            self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 
     def classify_beard(self, image):
         input_image = self.preprocess_image(image)
@@ -76,12 +71,7 @@ class BeardColorClassifier:
         return image
 
     def load_model(self, model_path):
-        if torch.cuda.is_available():
-            # Load model on CUDA if available
-            self.model.load_state_dict(torch.load(model_path))
-        else:
-            # Load model on CPU
-            self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 
     def classify_beard_color(self, image):
         input_image = self.preprocess_image(image)
@@ -96,27 +86,25 @@ def dummy_eye(background_image, x, y, placeholder_image_path, x_coordinate, y_co
     placeholder_image = Image.open(placeholder_image_path)
     target_size = (x, y)
     placeholder_image = placeholder_image.resize(target_size, Image.LANCZOS)
-    #placeholder_array = np.array(placeholder_image)
+    placeholder_array = np.array(placeholder_image)
     placeholder_width, placeholder_height = placeholder_image.size
     region_box = (x_coordinate, y_coordinate, x_coordinate + placeholder_width, y_coordinate + placeholder_height)
     placeholder_mask = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
     background_image.paste(placeholder_image, region_box, mask=placeholder_mask)
-    #background_array = np.array(background_image)
-    return background_image
+    background_array = np.array(background_image)
 
 # Function to overlay a beard on a background image
 def process_image_Beard(background_image, x, placeholder_image_path, x_coordinate, y_coordinate):
     placeholder_image = Image.open(placeholder_image_path)
     target_size = (x, x)
     placeholder_image = placeholder_image.resize(target_size, Image.LANCZOS)
-    #placeholder_array = np.array(placeholder_image)
+    placeholder_array = np.array(placeholder_image)
     placeholder_width, placeholder_height = placeholder_image.size
     region_box = (x_coordinate, y_coordinate, x_coordinate + placeholder_width, y_coordinate + placeholder_height)
     placeholder_mask = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
     background_image.paste(placeholder_image, region_box, mask=placeholder_mask)
     background_array = np.array(background_image)
-    #placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
-    return background_array
+    placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
 
 # Function to classify hairstyle
 class HairStyleClassifier:
@@ -140,12 +128,7 @@ class HairStyleClassifier:
         return image
 
     def load_model(self, model_path):
-        if torch.cuda.is_available():
-            # Load model on CUDA if available
-            self.model.load_state_dict(torch.load(model_path))
-        else:
-            # Load model on CPU
-            self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 
     def classify_hair(self, image):
         input_image = self.preprocess_image(image)
@@ -161,14 +144,13 @@ def process_image_menHair(background_image, x, y, placeholder_image_path, x_coor
     placeholder_image = Image.open(placeholder_image_path)
     target_size = (x, y)
     placeholder_image = placeholder_image.resize(target_size, Image.LANCZOS)
-    #placeholder_array = np.array(placeholder_image)
+    placeholder_array = np.array(placeholder_image)
     placeholder_width, placeholder_height = placeholder_image.size
     region_box = (x_coordinate, y_coordinate, x_coordinate + placeholder_width, y_coordinate + placeholder_height)
     placeholder_mask = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
     background_image.paste(placeholder_image, region_box, mask=placeholder_mask)
     background_array = np.array(background_image)
-    #placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
-    return background_array
+    placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
 
 # Function to generate Funko figurines
 def generate_funko_figurines(input_image):
@@ -250,8 +232,8 @@ def generate_funko_figurines(input_image):
         # Convert the resulting image to base64
         buffered = BytesIO()
         background_image.save(buffered, format="PNG")
-        base64_image = base64.b64encode(buffered.getvalue()).decode("utf-8")
-        final_images.append(base64_image)
+        #base64_image = base64.b64encode(buffered.getvalue()).decode("utf-8")
+        final_images.append(background_images)
 
     return final_images
 imageComponent = gr.Image(type="filepath")
