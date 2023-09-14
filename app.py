@@ -138,14 +138,7 @@ class HairStyleClassifier:
         predicted_class = torch.argmax(probabilities).item()
         predicted_label = self.class_names[predicted_class]
         return predicted_label
-def add_eyebrow(background_image, x_coordinate, y_coordinate, eyebrow_image_path):
-    eyebrow_image = Image.open(eyebrow_image_path)
-    target_size = (200, 200)  # Adjust the size as needed
-    eyebrow_image = eyebrow_image.resize(target_size, Image.LANCZOS)
-    region_box = (x_coordinate, y_coordinate, x_coordinate + eyebrow_image.width, y_coordinate + eyebrow_image.height)
-    eyebrow_mask = eyebrow_image.split()[3] if eyebrow_image.mode == 'RGBA' else None
-    background_image.paste(eyebrow_image, region_box, mask=eyebrow_mask)
-    background_array = np.array(background_image)
+
     
     
 # Function to overlay a hairstyle on a background image
@@ -182,7 +175,6 @@ def generate_funko_figurines(input_image):
         background_image = Image.open(background_image_path)
         x_coordinate = 90
         y_coordinate = 50
-        add_eyebrow(background_image, 115, 80, "/content/drive/MyDrive/AdobeColorFunko/EyezBrowz/Eyebrow.png")
         dummy_eye(background_image, 245, 345, 'Data/AdobeColorFunko/EyezBrowz/MaleEye.png', x_coordinate, y_coordinate)
 
         if predicted_style_label == 'Bandholz':
