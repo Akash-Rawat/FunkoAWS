@@ -233,7 +233,7 @@ def generate_funko_figurines(input_image):
         buffered = BytesIO()
         background_image.save(buffered, format="PNG")
         #base64_image = base64.b64encode(buffered.getvalue()).decode("utf-8")
-        final_images.append(background_images)
+        final_images.append(background_image)
 
     return final_images
 imageComponent = gr.Image(type="filepath")
