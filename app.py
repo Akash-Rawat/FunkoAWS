@@ -145,6 +145,8 @@ def add_eyebrow(background_image, x_coordinate, y_coordinate, eyebrow_image_path
     region_box = (x_coordinate, y_coordinate, x_coordinate + eyebrow_image.width, y_coordinate + eyebrow_image.height)
     eyebrow_mask = eyebrow_image.split()[3] if eyebrow_image.mode == 'RGBA' else None
     background_image.paste(eyebrow_image, region_box, mask=eyebrow_mask)
+    background_array = np.array(background_image)
+    
     
 # Function to overlay a hairstyle on a background image
 def process_image_menHair(background_image, x, y, placeholder_image_path, x_coordinate, y_coordinate):
