@@ -7,6 +7,11 @@ import base64
 
 # Combined Code for Beard and Hairstyle Detection and Styling
 
+background_image_paths = [
+    "Data/AdobeColorFunko/Outfits/DummyDress1.png",
+    "Data/AdobeColorFunko/Outfits/GlassesDummy.png",
+    "Data/AdobeColorFunko/Outfits/DummyDress3.png"
+]
 # Function to classify beard style
 class BeardClassifier:
     def __init__(self, model_path, class_names):
