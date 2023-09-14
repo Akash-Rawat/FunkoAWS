@@ -1,12 +1,13 @@
-import gradio as gr
-import torch
-from PIL import Image
-import numpy as np
 from io import BytesIO
 import base64
+
+import numpy as np
+import torch
 import torch.nn as nn
 import torch.optim as optim
 from torchvision import transforms, models
+from PIL import Image
+import gradio as gr
 
 # Combined Code for Beard and Hairstyle Detection and Styling
 
