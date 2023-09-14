@@ -233,6 +233,7 @@ def generate_funko_figurines(input_image):
 
     return final_images
 
+
 # Define Gradio input components
 input_image = gr.inputs.Image(type="pil", label="Upload your image")
 background_images = [gr.inputs.Image(type="pil", label="Background Image " + str(i + 1)) for i in range(3)]
