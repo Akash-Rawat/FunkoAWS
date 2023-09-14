@@ -173,57 +173,55 @@ def generate_funko_figurines(input_image):
 
         if predicted_style_label == 'Bandholz':
             process_image_Beard(background_image, 320,
-                                 "Data/AdobeColorFunko/Beard/Bandholz/{predicted_color_label}.png",
+                                 f"Data/AdobeColorFunko/Beard/Bandholz/{predicted_color_label}.png",
                                  50, 142)
 
         if predicted_style_label == 'ShortBeard':
             process_image_Beard(background_image, 300,
-                                 "Data/AdobeColorFunko/Beard/ShortBeard/{predicted_color_label}.png",
+                                 f"Data/AdobeColorFunko/Beard/ShortBeard/{predicted_color_label}.png",
                                  62, 118)
 
         if predicted_style_label == 'FullGoatee':
             process_image_Beard(background_image, 230,
-                                 "Data/AdobeColorFunko/Beard/Goatee/{predicted_color_label}.png",
+                                 f"Data/AdobeColorFunko/Beard/Goatee/{predicted_color_label}.png",
                                  96, 168)
 
         if predicted_style_label == 'RapIndustryStandards':
             process_image_Beard(background_image, 290,
-                                 "Data/AdobeColorFunko/Beard/RapIndustry/{predicted_color_label}.png",
+                                 f"Data/AdobeColorFunko/Beard/RapIndustry/{predicted_color_label}.png",
                                  67, 120)
 
         if predicted_style_label == 'Moustache':
             process_image_Beard(background_image, 220,
-                                 "Data/AdobeColorFunko/Beard/Moustache/{predicted_color_label}.png",
+                                 f"Data/AdobeColorFunko/Beard/Moustache/{predicted_color_label}.png",
                                  100, 160)
 
         if predicted_style_label == 'CleanShave':
             process_image_Beard(background_image, 220,
-                                 "Data/AdobeColorFunko/Beard/CleanShave/{predicted_color_label}.png",
+                                 f"Data/AdobeColorFunko/Beard/CleanShave/{predicted_color_label}.png",
                                  100, 160)
 
         # Add other conditions for different beard styles
 
         # Overlay hairstyle
         if predicted_hairStyle_label == 'Afro':
-            process_image_menHair(background_image, 336, 420, 'path_to_hairstyle_image', 41, 76)
-        if predicted_hairStyle_label == 'Afro':
             process_image_menHair(background_image, 336, 420,
-                                   "Data/AdobeColorFunko/MenHairstyle/Afro/{predicted_color_label}.png",
+                                   f"Data/AdobeColorFunko/MenHairstyle/Afro/{predicted_color_label}.png",
                                    41, 76)
 
         if predicted_hairStyle_label == 'Puff':
             process_image_menHair(background_image, 320, 420,
-                                   "Data/AdobeColorFunko/MenHairstyle/Puff/{predicted_color_label}.png",
+                                   f"Data/AdobeColorFunko/MenHairstyle/Puff/{predicted_color_label}.png",
                                    50, 68)
 
         if predicted_hairStyle_label == 'Spike':
             process_image_menHair(background_image, 310, 420,
-                                   "Data/AdobeColorFunko/MenHairstyle/Spike/{predicted_color_label}.png",
+                                   f"Data/AdobeColorFunko/MenHairstyle/Spike/{predicted_color_label}.png",
                                    50, 70)
 
         if predicted_hairStyle_label == 'Bald':
             process_image_menHair(background_image, 310, 420,
-                                   "Data/AdobeColorFunko/MenHairstyle/Bald/{predicted_color_label}.png",
+                                   f"Data/AdobeColorFunko/MenHairstyle/Bald/{predicted_color_label}.png",
                                    67, 120)
 
 
