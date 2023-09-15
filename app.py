@@ -191,9 +191,9 @@ def generate_funko_figurines(input_image):
                                  50, 142)
 
         if predicted_style_label == 'ShortBeard':
-            process_image_Beard(background_image, 300,
+            process_image_Beard(background_image, 290,
                                  f"Data/AdobeColorFunko/Beard/ShortBeard/{predicted_color_label}.png",
-                                 62, 118)
+                                 66, 118)
 
         if predicted_style_label == 'FullGoatee':
             process_image_Beard(background_image, 230,
@@ -203,7 +203,7 @@ def generate_funko_figurines(input_image):
         if predicted_style_label == 'RapIndustryStandards':
             process_image_Beard(background_image, 290,
                                  f"Data/AdobeColorFunko/Beard/RapIndustry/{predicted_color_label}.png",
-                                 67, 120)
+                                 68, 120)
 
         if predicted_style_label == 'Moustache':
             process_image_Beard(background_image, 220,
