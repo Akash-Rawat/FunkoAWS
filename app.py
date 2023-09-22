@@ -17,6 +17,7 @@ background_image_paths = [
     "Data/AdobeColorFunko/Outfits/DummyDress3.png"
 ]
 
+
 class GenderClassifier:
     def __init__(self, model_path, class_names):
         self.model = models.resnet18(pretrained=False)
@@ -55,6 +56,81 @@ class GenderClassifier:
 
         return predicted_label
     
+class WomenHairStyleClassifier:
+    def __init__(self, model_path, class_names):
+        self.model = models.resnet18(pretrained=False)
+        num_ftrs = self.model.fc.in_features
+        self.model.fc = nn.Linear(num_ftrs, len(class_names))
+        self.load_model(model_path)
+        self.model.eval()
+        self.data_transforms = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        self.class_names = class_names
+
+    def preprocess_image(self, image_path):
+        image = Image.open(image_path).convert("RGB")
+        image = self.data_transforms(image)
+        image = image.unsqueeze(0)
+        return image
+    
+    def load_model(self, model_path):
+        if torch.cuda.is_available():
+            self.model.load_state_dict(torch.load(model_path))
+        else:
+            self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+
+    def classify_hairStyle(self, image_path):
+        input_image = self.preprocess_image(image_path)
+
+        with torch.no_grad():
+            predictions = self.model(input_image)
+
+        probabilities = torch.nn.functional.softmax(predictions[0], dim=0)
+        predicted_class = torch.argmax(probabilities).item()
+        predicted_label = self.class_names[predicted_class]
+
+        return predicted_label
+    
+class WomenHairColorClassifier:
+    def __init__(self, model_path, class_names):
+        self.model = models.resnet18(pretrained=False)
+        num_ftrs = self.model.fc.in_features
+        self.model.fc = nn.Linear(num_ftrs, len(class_names))
+        self.load_model(model_path)
+        self.model.eval()
+        self.data_transforms = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        self.class_names = class_names
+
+    def preprocess_image(self, image_path):
+        image = Image.open(image_path).convert("RGB")
+        image = self.data_transforms(image)
+        image = image.unsqueeze(0)
+        return image
+
+    def load_model(self, model_path):
+        if torch.cuda.is_available():
+            self.model.load_state_dict(torch.load(model_path))
+        else:
+            self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+
+    def classify_hairColor(self, image_path):
+        input_image = self.preprocess_image(image_path)
+
+        with torch.no_grad():
+            predictions = self.model(input_image)
+
+        probabilities = torch.nn.functional.softmax(predictions[0], dim=0)
+        predicted_class = torch.argmax(probabilities).item()
+        predicted_label = self.class_names[predicted_class]
+
+        return predicted_label
 # Function to classify beard style
 class BeardClassifier:
     def __init__(self, model_path, class_names):
@@ -77,7 +153,10 @@ class BeardClassifier:
         return image
 
     def load_model(self, model_path):
-        self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+        if torch.cuda.is_available():
+            self.model.load_state_dict(torch.load(model_path))
+        else:
+            self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 
     def classify_beard(self, image):
         input_image = self.preprocess_image(image)
@@ -110,7 +189,10 @@ class BeardColorClassifier:
         return image
 
     def load_model(self, model_path):
-        self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+        if torch.cuda.is_available():
+            self.model.load_state_dict(torch.load(model_path))
+        else:
+            self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 
     def classify_beard_color(self, image):
         input_image = self.preprocess_image(image)
@@ -121,6 +203,42 @@ class BeardColorClassifier:
         predicted_label = self.class_names[predicted_class]
         return predicted_label
 
+# Function to classify hairstyle
+class HairStyleClassifier:
+    def __init__(self, model_path, class_names):
+        self.model = torch.hub.load('pytorch/vision', 'resnet18', pretrained=False)
+        num_ftrs = self.model.fc.in_features
+        self.model.fc = torch.nn.Linear(num_ftrs, len(class_names))
+        self.load_model(model_path)
+        self.model.eval()
+        self.data_transforms = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        self.class_names = class_names
+
+    def preprocess_image(self, image):
+        image = Image.open(image).convert("RGB")
+        image = self.data_transforms(image)
+        image = image.unsqueeze(0)
+        return image
+
+    def load_model(self, model_path):
+        if torch.cuda.is_available():
+            self.model.load_state_dict(torch.load(model_path))
+        else:
+            self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+
+    def classify_hair(self, image):
+        input_image = self.preprocess_image(image)
+        with torch.no_grad():
+            predictions = self.model(input_image)
+        probabilities = torch.nn.functional.softmax(predictions[0], dim=0)
+        predicted_class = torch.argmax(probabilities).item()
+        predicted_label = self.class_names[predicted_class]
+        return predicted_label
+    
 def dummy_eye(background_image, x, y, placeholder_image_path, x_coordinate, y_coordinate):
     placeholder_image = Image.open(placeholder_image_path)
     target_size = (x, y)
@@ -145,48 +263,7 @@ def process_image_Beard(background_image, x, placeholder_image_path, x_coordinat
     background_array = np.array(background_image)
     placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
 
-# Function to classify hairstyle
-class HairStyleClassifier:
-    def __init__(self, model_path, class_names):
-        self.model = torch.hub.load('pytorch/vision', 'resnet18', pretrained=False)
-        num_ftrs = self.model.fc.in_features
-        self.model.fc = torch.nn.Linear(num_ftrs, len(class_names))
-        self.load_model(model_path)
-        self.model.eval()
-        self.data_transforms = transforms.Compose([
-            transforms.Resize((224, 224)),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ])
-        self.class_names = class_names
-
-    def preprocess_image(self, image):
-        image = Image.open(image).convert("RGB")
-        image = self.data_transforms(image)
-        image = image.unsqueeze(0)
-        return image
-
-    def load_model(self, model_path):
-        self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
-
-    def classify_hair(self, image):
-        input_image = self.preprocess_image(image)
-        with torch.no_grad():
-            predictions = self.model(input_image)
-        probabilities = torch.nn.functional.softmax(predictions[0], dim=0)
-        predicted_class = torch.argmax(probabilities).item()
-        predicted_label = self.class_names[predicted_class]
-        return predicted_label
-def add_eyebrow(background_image, x_coordinate, y_coordinate, eyebrow_image_path):
-    eyebrow_image = Image.open(eyebrow_image_path)
-    target_size = (200, 200)  # Adjust the size as needed
-    eyebrow_image = eyebrow_image.resize(target_size, Image.LANCZOS)
-    region_box = (x_coordinate, y_coordinate, x_coordinate + eyebrow_image.width, y_coordinate + eyebrow_image.height)
-    eyebrow_mask = eyebrow_image.split()[3] if eyebrow_image.mode == 'RGBA' else None
-    background_image.paste(eyebrow_image, region_box, mask=eyebrow_mask)
-    background_array = np.array(background_image)
-
-def add_womenHair(background_image, x, y, placeholder_image_path, x_coordinate, y_coordinate):
+def process_image_WomanHair(background_image, x, y, placeholder_image_path, x_coordinate, y_coordinate):
     placeholder_image = Image.open(placeholder_image_path)
     target_size = (x, y)
     placeholder_image = placeholder_image.resize(target_size, Image.LANCZOS)
@@ -196,6 +273,18 @@ def add_womenHair(background_image, x, y, placeholder_image_path, x_coordinate, 
     placeholder_mask = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
     background_image.paste(placeholder_image, region_box, mask=placeholder_mask)
     background_array = np.array(background_image)
+    placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
+
+
+def add_eyebrow(background_image, x_coordinate, y_coordinate, eyebrow_image_path):
+    eyebrow_image = Image.open(eyebrow_image_path)
+    target_size = (200, 200)  # Adjust the size as needed
+    eyebrow_image = eyebrow_image.resize(target_size, Image.LANCZOS)
+    region_box = (x_coordinate, y_coordinate, x_coordinate + eyebrow_image.width, y_coordinate + eyebrow_image.height)
+    eyebrow_mask = eyebrow_image.split()[3] if eyebrow_image.mode == 'RGBA' else None
+    background_image.paste(eyebrow_image, region_box, mask=eyebrow_mask)
+    background_array = np.array(background_image)
+
 
     
     
@@ -214,9 +303,14 @@ def process_image_menHair(background_image, x, y, placeholder_image_path, x_coor
 
 # Function to generate Funko figurines
 def generate_funko_figurines(input_image):
+
+    WomenHairStyle_classifier = WomenHairStyleClassifier('Data/FunkoSavedModels/WomenHairStyle.pt', ['MediumLength', 'ShortHair', 'SidePlait'])
+    predicted_WomenHairStyle = WomenHairStyle_classifier.classify_hairStyle(input_image)
+
+    WomenHairColor_classifier = WomenHairColorClassifier('Data/FunkoSavedModels/WomenHairColor.pt', ['Black', 'Brown', 'Ginger', 'White'])
+    predicted_WomenHairColor = WomenHairColor_classifier.classify_hairColor(input_image)
     # Detect and classify gender
-    gender_classifier = GenderClassifier('Data/FunkoSavedModels/Gender.pt',
-                                    ['Female', 'Male'])
+    gender_classifier = GenderClassifier('Data/FunkoSavedModels/Gender.pt', ['Female', 'Male'])
     predicted_gender = gender_classifier.classify_gender(input_image)
 
     # Detect and classify beard style
@@ -309,7 +403,22 @@ def generate_funko_figurines(input_image):
             x_coordinate = 90
             y_coordinate = 50
             dummy_eye(background_image, x, y, placeholder_image_path, x_coordinate, y_coordinate)
-            add_womenHair(background_image, 300, 450, "Data/AdobeColorFunko/WomenHairstyle/One.png",55,50)
+            if predicted_WomenHairStyle == 'MediumLength':
+                process_image_WomanHair(background_image, 300,460,
+                                     f"Data/AdobeColorFunko/WomenHairstyle/MediumLength/{predicted_WomenHairColor}.png",
+                                     56, 50)
+
+            if predicted_WomenHairStyle == 'ShortHair':
+                process_image_WomanHair(background_image, 270,460,
+                                     f"Data/AdobeColorFunko/WomenHairstyle/ShortHair/{predicted_WomenHairColor}.png",
+                                     58, 52)
+
+            if predicted_WomenHairStyle == 'SidePlait':
+                process_image_WomanHair(background_image, 300,450,
+                                     f"Data/AdobeColorFunko/WomenHairstyle/SidePlait/{predicted_WomenHairColor}.png",
+                                     54, 56)
+
+
         # Convert the resulting image to base64
         buffered = BytesIO()
         background_image.save(buffered, format="PNG")
