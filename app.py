@@ -318,7 +318,7 @@ def generate_funko_figurines(input_image):
     predicted_style_label = beard_classifier.classify_beard(input_image)
 
     # Detect and classify beard color
-    beard_color_classifier = BeardColorClassifier('Data/FunkoSavedModels/FunkoResnet18Color.pt', ['Black', 'DarkBrown', 'Ginger', 'LightBrown', 'SaltAndPepper', 'White'])
+    beard_color_classifier = BeardColorClassifier('Data/FunkoSavedModels/FunkoResnet18BeardColor.pt', ['Black', 'DarkBrown', 'Ginger', 'LightBrown', 'SaltAndPepper', 'White'])
     predicted_color_label = beard_color_classifier.classify_beard_color(input_image)
 
     # Classify hairstyle
