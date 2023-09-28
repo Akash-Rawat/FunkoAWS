@@ -203,6 +203,7 @@ class BeardColorClassifier:
         predicted_label = self.class_names[predicted_class]
         return predicted_label
 
+
 # Function to classify hairstyle
 class HairStyleClassifier:
     def __init__(self, model_path, class_names):
@@ -238,7 +239,43 @@ class HairStyleClassifier:
         predicted_class = torch.argmax(probabilities).item()
         predicted_label = self.class_names[predicted_class]
         return predicted_label
-    
+
+class MenHairColorClassifier:
+    def __init__(self, model_path, class_names):
+        self.model = torch.hub.load('pytorch/vision', 'resnet18', pretrained=False)
+        num_ftrs = self.model.fc.in_features
+        self.model.fc = torch.nn.Linear(num_ftrs, len(class_names))
+        self.load_model(model_path)
+        self.model.eval()
+        self.data_transforms = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        self.class_names = class_names
+
+    def preprocess_image(self, image):
+        image = Image.open(image).convert("RGB")
+        image = self.data_transforms(image)
+        image = image.unsqueeze(0)
+        return image
+
+    def load_model(self, model_path):
+        if torch.cuda.is_available():
+            self.model.load_state_dict(torch.load(model_path))
+        else:
+            self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+
+    def classify_menHair_color(self, image):
+        input_image = self.preprocess_image(image)
+        with torch.no_grad():
+            predictions = self.model(input_image)
+        probabilities = torch.nn.functional.softmax(predictions[0], dim=0)
+        predicted_class = torch.argmax(probabilities).item()
+        predicted_label = self.class_names[predicted_class]
+        return predicted_label
+
+
 def dummy_eye(background_image, x, y, placeholder_image_path, x_coordinate, y_coordinate):
     placeholder_image = Image.open(placeholder_image_path)
     target_size = (x, y)
@@ -325,6 +362,9 @@ def generate_funko_figurines(input_image):
     hair_style_classifier = HairStyleClassifier('Data/FunkoSavedModels/FunkoResnet18HairStyle.pt', ['Afro', 'Bald', 'Puff', 'Spike'])
     predicted_hairStyle_label = hair_style_classifier.classify_hair(input_image)
 
+    #classify menHairColor
+    menhair_color_classifier = MenHairColorClassifier('Data/FunkoSavedModels/FunkoResnet18MenHairColor.pt', ['Black', 'DarkBrown', 'Ginger', 'LightBrown', 'SaltAndPepper', 'White'])
+    predicted_menhairColor_label = menhair_color_classifier.classify_menHair_color(input_image)
     # Process background images and apply beard style and color along with hair style and color
     final_images = []
 
@@ -377,22 +417,22 @@ def generate_funko_figurines(input_image):
             # Overlay hairstyle
             if predicted_hairStyle_label == 'Afro':
                 process_image_menHair(background_image, 336, 420,
-                                       f"Data/AdobeColorFunko/MenHairstyle/Afro/{predicted_color_label}.png",
+                                       f"Data/AdobeColorFunko/MenHairstyle/Afro/{predicted_menhairColor_label}.png",
                                        41, 76)
 
             if predicted_hairStyle_label == 'Puff':
                 process_image_menHair(background_image, 320, 420,
-                                       f"Data/AdobeColorFunko/MenHairstyle/Puff/{predicted_color_label}.png",
+                                       f"Data/AdobeColorFunko/MenHairstyle/Puff/{predicted_menhairColor_label}.png",
                                        50, 68)
 
             if predicted_hairStyle_label == 'Spike':
                 process_image_menHair(background_image, 310, 420,
-                                       f"Data/AdobeColorFunko/MenHairstyle/Spike/{predicted_color_label}.png",
+                                       f"Data/AdobeColorFunko/MenHairstyle/Spike/{predicted_menhairColor_label}.png",
                                        50, 70)
 
             if predicted_hairStyle_label == 'Bald':
                 process_image_menHair(background_image, 310, 420,
-                                       f"Data/AdobeColorFunko/MenHairstyle/Bald/{predicted_color_label}.png",
+                                       f"Data/AdobeColorFunko/MenHairstyle/Bald/{predicted_menhairColor_label}.png",
                                        67, 120)
 
 
