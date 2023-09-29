@@ -11,10 +11,16 @@ import gradio as gr
 
 # Combined Code for Beard and Hairstyle Detection and Styling
 
-background_image_paths = [
-    "Data/AdobeColorFunko/Outfits/DummyDress1.png",
-    "Data/AdobeColorFunko/Outfits/GlassesDummy.png",
-    "Data/AdobeColorFunko/Outfits/DummyDress3.png"
+male_background_image_paths = [
+    "Data/AdobeColorFunko/Outfits/MenOutfits/DummyDress1.png",
+    "Data/AdobeColorFunko/Outfits/MenOutfits/GlassesDummy.png",
+    "Data/AdobeColorFunko/Outfits/MenOutfits/DummyDress3.png"
+]
+
+female_background_image_paths = [
+    "Data/AdobeColorFunko/Outfits/WomenOutfits/WomenOne.png",
+    "Data/AdobeColorFunko/Outfits/WomenOutfits/WomenTwo.png",
+    "Data/AdobeColorFunko/Outfits/WomenOutfits/WomenThree.png"
 ]
 
 
@@ -368,8 +374,13 @@ def generate_funko_figurines(input_image):
     # Process background images and apply beard style and color along with hair style and color
     final_images = []
 
-    for background_image_path in background_image_paths:
-        background_image = Image.open(background_image_path)
+    if predicted_gender == 'Male':
+        background_image_paths = male_background_image_paths
+    if predicted_gender == 'Female':
+        background_image_paths = female_background_image_paths
+        
+    for background_image_paths in background_image_paths:
+        background_image = Image.open(background_image_paths)
         x_coordinate = 90
         y_coordinate = 50
         add_eyebrow(background_image, 115, 80, "Data/AdobeColorFunko/EyezBrowz/Eyebrow.png")
