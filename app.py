@@ -432,14 +432,14 @@ def generate_funko_figurines(input_image):
                                        41, 76)
 
             if predicted_hairStyle_label == 'Puff':
-                process_image_menHair(background_image, 320, 420,
+                process_image_menHair(background_image, 305, 420,
                                        f"Data/AdobeColorFunko/MenHairstyle/Puff/{predicted_menhairColor_label}.png",
-                                       50, 68)
+                                       56, 68)
 
             if predicted_hairStyle_label == 'Spike':
                 process_image_menHair(background_image, 310, 420,
                                        f"Data/AdobeColorFunko/MenHairstyle/Spike/{predicted_menhairColor_label}.png",
-                                       50, 70)
+                                       52, 70)
 
             if predicted_hairStyle_label == 'Bald':
                 process_image_menHair(background_image, 310, 420,
@@ -462,7 +462,7 @@ def generate_funko_figurines(input_image):
             if predicted_WomenHairStyle == 'ShortHair':
                 process_image_WomanHair(background_image, 270,460,
                                      f"Data/AdobeColorFunko/WomenHairstyle/ShortHair/{predicted_WomenHairColor}.png",
-                                     58, 52)
+                                     61, 49)
 
             if predicted_WomenHairStyle == 'SidePlait':
                 process_image_WomanHair(background_image, 300,450,
