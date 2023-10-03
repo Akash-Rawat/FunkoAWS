@@ -480,14 +480,14 @@ def generate_funko_figurines(input_image):
 imageComponent = gr.Image(type="filepath")
 
 # Define Gradio input components
-input_image = gr.inputs.Image(type="pil", label="Upload your image")
-background_images = [gr.inputs.Image(type="pil", label="Background Image " + str(i + 1)) for i in range(3)]
+input_image = gr.Image(type="pil", label="Upload your image")
+background_images = [gr.Image(type="pil", label="Background Image " + str(i + 1)) for i in range(3)]
 
 # Create Gradio interface
 gr.Interface(
     fn=generate_funko_figurines,
     inputs=imageComponent,
-    outputs=[gr.outputs.Image(type="pil", label="Generated Image " + str(i + 1)) for i in range(3)],
+    outputs=[gr.Image(type="pil", label="Generated Image " + str(i + 1)) for i in range(3)],
     title="Funko Figurine Generator",
     description="Generate personalized Funko figurines with different styles and backgrounds.",
 ).launch()
