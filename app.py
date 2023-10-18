@@ -345,7 +345,7 @@ def process_image_menHair(background_image, x, y, placeholder_image_path, x_coor
     placeholder_alpha = placeholder_image.split()[3] if placeholder_image.mode == 'RGBA' else None
 
 # Function to generate Funko figurines
-def generate_funko_figurines(input_image):
+def Igenerate_funko_figurines(input_image):
 
     WomenHairStyle_classifier = WomenHairStyleClassifier('Data/FunkoSavedModels/WomenHairStyle.pt', ['MediumLength', 'ShortHair', 'SidePlait'])
     predicted_WomenHairStyle = WomenHairStyle_classifier.classify_hairStyle(input_image)
@@ -480,14 +480,23 @@ def generate_funko_figurines(input_image):
 imageComponent = gr.Image(type="filepath")
 
 # Define Gradio input components
-input_image = gr.Image(type="pil", label="Upload your image")
-background_images = [gr.Image(type="pil", label="Background Image " + str(i + 1)) for i in range(3)]
+input_image = gr.inputs.Image(type="pil", label="Upload your image")
 
-# Create Gradio interface
-gr.Interface(
-    fn=generate_funko_figurines,
-    inputs=imageComponent,
-    outputs=[gr.Image(type="pil", label="Generated Image " + str(i + 1)) for i in range(3)],
-    title="Funko Figurine Generator",
-    description="Generate personalized Funko figurines with different styles and backgrounds.",
-).launch()
+
+with gr.Blocks() as demo:
+    gr.Markdown(
+    """
+    # Funko POP! Figurine Creation
+    Enabling Streamlined Automation with Generative Artificial Intelligence 
+    """)
+    imageComponent = gr.Image(type="filepath").style(height=300, width=300)
+    #MyOutputs=[gr.Image(type="pil", label="Generated Image " + str(i + 1)) for i in range(3)]
+    with gr.Row():
+        MyOutputs = [gr.Image(type="pil", label="Generated Image " + str(i + 1)).style(height=300, width=300) for i in range(3)]
+    submitButton = gr.Button(value="Submit")
+    submitButton.click(Igenerate_funko_figurines, inputs=imageComponent, outputs=MyOutputs)
+
+
+if __name__ == "__main__":
+    demo.launch()
+
